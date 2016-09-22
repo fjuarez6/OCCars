@@ -7,10 +7,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import java.text.NumberFormat;
+
 public class PurchaseActivity extends AppCompatActivity {
+
+    private static NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     private String monthlyPaymentText;
     private String loanSummaryText;
+    private String term;
 
 
     private EditText carPriceEditText;
@@ -20,7 +25,7 @@ public class PurchaseActivity extends AppCompatActivity {
     private RadioButton fiveYearsRadioButton;
 
 
-    private Car mCar;
+     private Car mCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class PurchaseActivity extends AppCompatActivity {
         mCar.setLoanTerm(loanTerm);
 
         Intent loanSummaryIntent = new Intent(this, LoanSummaryActivity.class);
+        constructLoanSummaryText();
         loanSummaryIntent.putExtra("MonthlyPayment", monthlyPaymentText);
         loanSummaryIntent.putExtra("LoanSummary", loanSummaryText);
         startActivity(loanSummaryIntent);
@@ -71,14 +77,29 @@ public class PurchaseActivity extends AppCompatActivity {
 
     private void constructLoanSummaryText()
     {
-        monthlyPaymentText = getString(R.string.report_line1) + mCar.calculateMonthlyPayment();
+        monthlyPaymentText = getString(R.string.report_line1) + currency.format(mCar.calculateMonthlyPayment());
 
-        loanSummaryText = getString(R.string.report_line2) + mCar.getPrice() + getString(R.string.report_line3)
-                + mCar.getDownPayment()  + getString(R.string.report_line5)
-                + mCar.calculateTaxAmount() + getString(R.string.report_line6) + mCar.calculateTotalCost()
-                + getString(R.string.report_line7) + mCar.calculateBorrowedAmount() + getString(R.string.report_line8)
-                + mCar.calculateInterestAmount() + getString(R.string.report_line4) + mCar.getLoanTerm()
-                + getString(R.string.report_line9) + getString(R.string.report_line10) + getString(R.string.report_line11)
+        loanSummaryText = getString(R.string.report_line2) + "             " + currency.format(mCar.getPrice())
+                + getString(R.string.report_line3) + "            " + currency.format(mCar.getDownPayment())
+                + getString(R.string.report_line5) + "                        " + currency.format(mCar.calculateTaxAmount())
+                + getString(R.string.report_line6) + "                          " + currency.format(mCar.calculateTotalCost())
+                + getString(R.string.report_line7) + "           " + currency.format(mCar.calculateBorrowedAmount())
+                + getString(R.string.report_line8) + "               " + currency.format(mCar.calculateInterestAmount())
+                + "\n" + getString(R.string.report_line4) + " " + loanTermText() + "\n" + getString(R.string.report_line9)
+                + getString(R.string.report_line10)
+                + getString(R.string.report_line11)
                 + getString(R.string.report_line12);
+    }
+
+    private String loanTermText()
+    {
+        if (mCar.getLoanTerm() == 3)
+            term = getString(R.string.years3);
+        else if (mCar.getLoanTerm() == 4)
+            term = getString(R.string.years4);
+        else
+            term = getString(R.string.years5);
+
+        return term;
     }
 }

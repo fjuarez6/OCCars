@@ -11,6 +11,7 @@ public class LoanSummaryActivity extends Activity {
 
     private Button goToDataEntryButton;
     private TextView monthlyPaymentTextView;
+    private TextView loanSummaryTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +20,14 @@ public class LoanSummaryActivity extends Activity {
 
         goToDataEntryButton = (Button) findViewById(R.id.goToDataEntryButton);
         monthlyPaymentTextView = (TextView) findViewById(R.id.monthlyPaymentTextView);
+        loanSummaryTextView = (TextView) findViewById(R.id.loanSummaryTextView);
 
         Intent  intentFromPurchaseActivity = getIntent();
         String monthlyPaymentText = intentFromPurchaseActivity.getStringExtra("MonthlyPayment");
+        String loanSummaryText = intentFromPurchaseActivity.getStringExtra("LoanSummary");
         monthlyPaymentTextView.setText(monthlyPaymentText);
+        loanSummaryTextView.setText(loanSummaryText);
+
 
         goToDataEntryButton.setOnClickListener(new View.OnClickListener() {
                                                    @Override

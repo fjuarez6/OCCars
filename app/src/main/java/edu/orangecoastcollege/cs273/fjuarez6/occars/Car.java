@@ -8,7 +8,10 @@ public class Car {
     private double mDownPayment;
     private int mLoanTerm;
     private double mPrice;
-    private static final double TAX_RATE = 0.075;
+    private static final double TAX_RATE = 0.08;
+    private static final double APR_3_YEARS = 0.0462;
+    private static final double APR_4_YEARS = 0.0419;
+    private static final double APR_5_YEARS = 0.0416;
 
     public Car() {
         mDownPayment = 0.0;
@@ -42,26 +45,32 @@ public class Car {
 
     public double calculateBorrowedAmount()
     {
-        return 0.0;
+        return calculateTotalCost() - mDownPayment;
     }
 
     public double calculateInterestAmount()
     {
-        return 0.0;
+        if (mLoanTerm == 3)
+            return (calculateBorrowedAmount() * (((APR_3_YEARS / 12) * Math.pow((1 +  (APR_3_YEARS / 12)), 12)) / (Math.pow((1 + (APR_3_YEARS / 12)), 12) - 1)));
+        else if (mLoanTerm == 4)
+            return (calculateBorrowedAmount() * (((APR_4_YEARS / 12) * Math.pow((1 +  (APR_4_YEARS / 12)), 12)) / (Math.pow((1 + (APR_4_YEARS / 12)), 12) - 1)));
+        else
+            return (calculateBorrowedAmount() * (((APR_5_YEARS / 12) * Math.pow((1 +  (APR_5_YEARS / 12)), 12)) / (Math.pow((1 + (APR_5_YEARS / 12)), 12) - 1)));
+
     }
 
     public double calculateMonthlyPayment()
     {
-        return 0.0;
+        return ((calculateBorrowedAmount() + calculateInterestAmount()) / (12 * mLoanTerm));
     }
 
     public double calculateTaxAmount()
     {
-        return 0.0;
+        return (mPrice * TAX_RATE);
     }
 
     public double calculateTotalCost()
     {
-        return 0.0;
+        return mPrice + calculateTaxAmount();
     }
 }
